@@ -1,3 +1,6 @@
 [submodule "lib/pdfium-binaries"]
 	path = lib/pdfium-binaries
 	url = https://github.com/bblanchon/pdfium-binaries.git
+[submodule "lib/DUnitX"]
+	path = lib/DUnitX
+	url = https://github.com/VSoftTechnologies/DUnitX.git
