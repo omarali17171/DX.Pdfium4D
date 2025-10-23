@@ -7,12 +7,26 @@ object MainForm: TMainForm
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  DesignerMasterStyle = 0
   OnCreate = FormCreate
-  object WebBrowser: TWebBrowser
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object DropPanel: TPanel
     Align = Client
+    HitTest = False
     Size.Width = 800.000000000000000000
     Size.Height = 600.000000000000000000
     Size.PlatformDefault = False
+    TabOrder = 1
+    object DropLabel: TLabel
+      Align = Client
+      StyledSettings = [Family, Style, FontColor]
+      Size.Width = 800.000000000000000000
+      Size.Height = 600.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 24.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = 'Drop PDF file here'#13#10'or use command line parameter'
+      TabOrder = 0
+    end
   end
 end

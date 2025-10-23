@@ -8,27 +8,35 @@ uses
   System.UITypes,
   System.Classes,
   System.Variants,
-  System.IOUtils,
   FMX.Types,
   FMX.Controls,
   FMX.Forms,
   FMX.Graphics,
   FMX.Dialogs,
-  FMX.WebBrowser;
+  FMX.Objects,
+  FMX.StdCtrls,
+  System.IOUtils,
+  DX.Pdf.Viewer.FMX,
+  DX.Pdf.Document;
 
 type
   TMainForm = class(TForm)
-    WebBrowser: TWebBrowser;
+    DropPanel: TPanel;
+    DropLabel: TLabel;
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
+    FPdfViewer: TPdfViewer;
     FCurrentPdfPath: string;
+    procedure HideDropPanel;
+    procedure ShowDropPanel;
+    procedure CreatePdfViewer;
   protected
     procedure LoadPdfFile(const AFilePath: string);
     procedure ProcessCommandLineParams;
   public
     procedure DragOver(const Data: TDragObject; const Point: TPointF; var Operation: TDragOperation); override;
     procedure DragDrop(const Data: TDragObject; const Point: TPointF); override;
-    procedure DropFiles(const AFiles: array of string);
   end;
 
 var
@@ -43,8 +51,41 @@ begin
   Caption := 'DX PDF-Viewer 1.0';
   FCurrentPdfPath := '';
 
+  // Create PDF viewer dynamically
+  CreatePdfViewer;
+
+  // Show drop panel initially
+  ShowDropPanel;
+
   // Process command line parameters
   ProcessCommandLineParams;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  FreeAndNil(FPdfViewer);
+end;
+
+procedure TMainForm.CreatePdfViewer;
+begin
+  FPdfViewer := TPdfViewer.Create(Self);
+  FPdfViewer.Parent := Self;
+  FPdfViewer.Align := TAlignLayout.Client;
+  FPdfViewer.BackgroundColor := TAlphaColors.White;
+  FPdfViewer.SendToBack; // Send behind DropPanel
+end;
+
+procedure TMainForm.HideDropPanel;
+begin
+  DropPanel.Visible := False;
+  DropPanel.HitTest := False;
+end;
+
+procedure TMainForm.ShowDropPanel;
+begin
+  DropPanel.Visible := True;
+  DropPanel.HitTest := False;  // Let drag events pass through to form
+  DropPanel.BringToFront;
 end;
 
 procedure TMainForm.ProcessCommandLineParams;
@@ -66,8 +107,6 @@ begin
 end;
 
 procedure TMainForm.LoadPdfFile(const AFilePath: string);
-var
-  LFileUrl: string;
 begin
   if not TFile.Exists(AFilePath) then
   begin
@@ -75,46 +114,49 @@ begin
     Exit;
   end;
 
-  FCurrentPdfPath := AFilePath;
+  try
+    // Load PDF in viewer
+    FPdfViewer.LoadFromFile(AFilePath);
 
-  // Convert file path to file:// URL
-  LFileUrl := 'file:///' + StringReplace(AFilePath, '\', '/', [rfReplaceAll]);
+    FCurrentPdfPath := AFilePath;
 
-  // Load PDF in WebBrowser
-  WebBrowser.Navigate(LFileUrl);
+    // Hide drop panel when PDF is loaded
+    HideDropPanel;
 
-  // Update window title
-  Caption := 'DX PDF-Viewer 1.0 - ' + TPath.GetFileName(AFilePath);
+    // Update window title
+    Caption := 'DX PDF-Viewer 1.0 - ' + TPath.GetFileName(AFilePath);
+  except
+    on E: EPdfException do
+    begin
+      ShowMessage('Error loading PDF: ' + E.Message);
+      ShowDropPanel;
+    end;
+  end;
 end;
 
 procedure TMainForm.DragOver(const Data: TDragObject; const Point: TPointF; var Operation: TDragOperation);
 begin
-  // Check if it's a PDF file
-  if LowerCase(TPath.GetExtension(Data.Files[0])) = '.pdf' then
+  // Check if we have files and if it's a PDF file
+  if (Length(Data.Files) > 0) and
+     (LowerCase(TPath.GetExtension(Data.Files[0])) = '.pdf') then
   begin
-    Operation := TDragOperation.Move;
+    Operation := TDragOperation.Copy;
+  end
+  else
+  begin
+    Operation := TDragOperation.None;
   end;
 end;
 
 procedure TMainForm.DragDrop(const Data: TDragObject; const Point: TPointF);
 begin
-  // Load the file
-  LoadPdfFile(Data.Files[0]);
-end;
-
-procedure TMainForm.DropFiles(const AFiles: array of string);
-var
-  LFilePath: string;
-begin
-  // Process only the first file
-  if Length(AFiles) > 0 then
+  // Check if we have files
+  if Length(Data.Files) > 0 then
   begin
-    LFilePath := AFiles[0];
-
     // Check if it's a PDF file
-    if LowerCase(TPath.GetExtension(LFilePath)) = '.pdf' then
+    if LowerCase(TPath.GetExtension(Data.Files[0])) = '.pdf' then
     begin
-      LoadPdfFile(LFilePath);
+      LoadPdfFile(Data.Files[0]);
     end
     else
     begin

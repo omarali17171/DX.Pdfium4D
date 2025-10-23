@@ -125,3 +125,15 @@ GTAGS
 !.vscode/tasks.json
 !.vscode/launch.json
 
+# PDFium binaries (downloaded, not in Git)
+lib/pdfium-bin/*.tgz
+lib/pdfium-bin/bin/
+lib/pdfium-bin/lib/
+lib/pdfium-bin/include/
+lib/pdfium-bin/licenses/
+
+# Keep only documentation and config files in pdfium-bin
+!lib/pdfium-bin/README.md
+!lib/pdfium-bin/VERSION
+!lib/pdfium-bin/LICENSE
+
