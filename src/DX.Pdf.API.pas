@@ -228,7 +228,7 @@ begin
     FPDF_ERR_SECURITY: Result := 'Unsupported security scheme';
     FPDF_ERR_PAGE: Result := 'Page not found or content error';
   else
-    Result := 'Unknown error code: ' + IntToStr(AError);
+    Result := 'Unknown error code: ' + AError.ToString;
   end;
 end;
 

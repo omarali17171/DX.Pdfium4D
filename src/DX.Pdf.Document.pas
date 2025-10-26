@@ -384,7 +384,7 @@ begin
   FPDF_GetMetaText(FHandle, FPDF_BYTESTRING(PAnsiChar(LTagAnsi)), @LBuffer[0], LBufLen);
 
   // Convert to string (remove null terminator)
-  Result := Trim(string(PWideChar(@LBuffer[0])));
+  Result := string(PWideChar(@LBuffer[0])).Trim;
 end;
 
 function TPdfDocument.GetPdfAInfo: string;
@@ -403,42 +403,42 @@ begin
   LSubject := GetMetadata('Subject');
 
   // Look for PDF/A markers in metadata
-  if Pos('PDF/A', UpperCase(LProducer)) > 0 then
+  if LProducer.ToUpper.Contains('PDF/A') then
   begin
     // Try to extract version (e.g., "PDF/A-1b", "PDF/A-2u", "PDF/A-3")
-    if Pos('PDF/A-1', UpperCase(LProducer)) > 0 then
+    if LProducer.ToUpper.Contains('PDF/A-1') then
       Result := 'PDF/A-1'
-    else if Pos('PDF/A-2', UpperCase(LProducer)) > 0 then
+    else if LProducer.ToUpper.Contains('PDF/A-2') then
       Result := 'PDF/A-2'
-    else if Pos('PDF/A-3', UpperCase(LProducer)) > 0 then
+    else if LProducer.ToUpper.Contains('PDF/A-3') then
       Result := 'PDF/A-3'
-    else if Pos('PDF/A-4', UpperCase(LProducer)) > 0 then
+    else if LProducer.ToUpper.Contains('PDF/A-4') then
       Result := 'PDF/A-4'
     else
       Result := 'PDF/A';
   end
-  else if Pos('PDF/A', UpperCase(LCreator)) > 0 then
+  else if LCreator.ToUpper.Contains('PDF/A') then
   begin
-    if Pos('PDF/A-1', UpperCase(LCreator)) > 0 then
+    if LCreator.ToUpper.Contains('PDF/A-1') then
       Result := 'PDF/A-1'
-    else if Pos('PDF/A-2', UpperCase(LCreator)) > 0 then
+    else if LCreator.ToUpper.Contains('PDF/A-2') then
       Result := 'PDF/A-2'
-    else if Pos('PDF/A-3', UpperCase(LCreator)) > 0 then
+    else if LCreator.ToUpper.Contains('PDF/A-3') then
       Result := 'PDF/A-3'
-    else if Pos('PDF/A-4', UpperCase(LCreator)) > 0 then
+    else if LCreator.ToUpper.Contains('PDF/A-4') then
       Result := 'PDF/A-4'
     else
       Result := 'PDF/A';
   end
-  else if Pos('PDF/A', UpperCase(LSubject)) > 0 then
+  else if LSubject.ToUpper.Contains('PDF/A') then
   begin
-    if Pos('PDF/A-1', UpperCase(LSubject)) > 0 then
+    if LSubject.ToUpper.Contains('PDF/A-1') then
       Result := 'PDF/A-1'
-    else if Pos('PDF/A-2', UpperCase(LSubject)) > 0 then
+    else if LSubject.ToUpper.Contains('PDF/A-2') then
       Result := 'PDF/A-2'
-    else if Pos('PDF/A-3', UpperCase(LSubject)) > 0 then
+    else if LSubject.ToUpper.Contains('PDF/A-3') then
       Result := 'PDF/A-3'
-    else if Pos('PDF/A-4', UpperCase(LSubject)) > 0 then
+    else if LSubject.ToUpper.Contains('PDF/A-4') then
       Result := 'PDF/A-4'
     else
       Result := 'PDF/A';
