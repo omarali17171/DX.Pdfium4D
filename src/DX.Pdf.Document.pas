@@ -1,15 +1,17 @@
 {*******************************************************************************
   Unit: DX.Pdf.Document
 
-  Part of HOLOCRON - The Delphi PDF Viewer
-  https://developer-experts.net
+  Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium
+  https://github.com/omonien/DX-Pdfium4D
 
   Description:
     Object-oriented wrapper for PDFium library.
     Provides high-level access to PDF documents with automatic resource management.
     All classes use reference counting and automatic cleanup.
 
+  Author: Olaf Monien
   Copyright (c) 2025 Olaf Monien
+  License: MIT - see LICENSE file
 *******************************************************************************}
 unit DX.Pdf.Document;
 

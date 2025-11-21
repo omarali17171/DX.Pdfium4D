@@ -1,8 +1,8 @@
 {*******************************************************************************
   Unit: DX.Pdf.API
 
-  Part of HOLOCRON - The Delphi PDF Viewer
-  https://developer-experts.net
+  Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium
+  https://github.com/omonien/DX-Pdfium4D
 
   Description:
     Platform-independent PDFium C-API bindings for Delphi.
@@ -13,7 +13,9 @@
     PDFium from https://pdfium.googlesource.com/pdfium/
     Binaries from https://github.com/bblanchon/pdfium-binaries
 
+  Author: Olaf Monien
   Copyright (c) 2025 Olaf Monien
+  License: MIT - see LICENSE file
 *******************************************************************************}
 unit DX.Pdf.API;
 

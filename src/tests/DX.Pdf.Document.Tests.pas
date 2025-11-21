@@ -1,3 +1,17 @@
+{*******************************************************************************
+  Unit: DX.Pdf.Document.Tests
+
+  Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium
+  https://github.com/omonien/DX-Pdfium4D
+
+  Description:
+    Unit tests for DX.Pdf.Document wrapper classes.
+    Tests PDF document loading, metadata extraction, and rendering.
+
+  Author: Olaf Monien
+  Copyright (c) 2025 Olaf Monien
+  License: MIT - see LICENSE file
+*******************************************************************************}
 unit DX.Pdf.Document.Tests;
 
 interface

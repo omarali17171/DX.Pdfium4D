@@ -1,15 +1,17 @@
 {*******************************************************************************
   Unit: DX.Pdf.Viewer.FMX
 
-  Part of HOLOCRON - The Delphi PDF Viewer
-  https://developer-experts.net
+  Part of DX Pdfium4D - Delphi Cross-Platform Wrapper für Pdfium
+  https://github.com/omonien/DX-Pdfium4D
 
   Description:
     FMX PDF Viewer Component.
     Provides a visual component for displaying PDF documents in FMX applications.
     Supports navigation, zooming, and drag-and-drop.
 
+  Author: Olaf Monien
   Copyright (c) 2025 Olaf Monien
+  License: MIT - see LICENSE file
 *******************************************************************************}
 unit DX.Pdf.Viewer.FMX;
 
