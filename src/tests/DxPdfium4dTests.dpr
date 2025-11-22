@@ -26,7 +26,9 @@ uses
   DUnitX.TestFramework,
   DX.Pdf.API in '..\DX.Pdf.API.pas',
   DX.Pdf.Document in '..\DX.Pdf.Document.pas',
-  DX.Pdf.Document.Tests in 'DX.Pdf.Document.Tests.pas';
+  DX.Pdf.Viewer.FMX in '..\DX.Pdf.Viewer.FMX.pas',
+  DX.Pdf.Document.Tests in 'DX.Pdf.Document.Tests.pas',
+  DX.Pdf.CheatSheets.Tests in 'DX.Pdf.CheatSheets.Tests.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
