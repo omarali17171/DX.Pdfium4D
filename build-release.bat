@@ -1,8 +1,20 @@
 @echo off
 setlocal
 
+REM Check if version parameter is provided
+if "%1"=="" (
+    echo ERROR: Version parameter required!
+    echo Usage: build-release.bat VERSION [upload]
+    echo Example: build-release.bat v1.1.0
+    echo Example: build-release.bat v1.1.0 upload
+    exit /b 1
+)
+
+set VERSION=%1
+set UPLOAD_FLAG=%2
+
 echo ========================================
-echo Building DX PDF Viewer Release Versions
+echo Building DX PDF Viewer Release %VERSION%
 echo ========================================
 echo.
 
@@ -65,9 +77,18 @@ echo ========================================
 echo Creating ZIP archives...
 echo ========================================
 
-REM Create ZIP files using PowerShell
-powershell -Command "Compress-Archive -Path 'release\DX.PdfViewer-Win32\*' -DestinationPath 'release\DX.PdfViewer-v1.0.0-Win32.zip' -Force"
-powershell -Command "Compress-Archive -Path 'release\DX.PdfViewer-Win64\*' -DestinationPath 'release\DX.PdfViewer-v1.0.0-Win64.zip' -Force"
+REM Create ZIP files using PowerShell with explicit module import
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module Microsoft.PowerShell.Archive -ErrorAction Stop; Compress-Archive -Path 'release\DX.PdfViewer-Win32\*' -DestinationPath 'release\DX.PdfViewer-%VERSION%-Win32.zip' -Force"
+if errorlevel 1 (
+    echo ERROR: Failed to create Win32 ZIP archive!
+    exit /b 1
+)
+
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Import-Module Microsoft.PowerShell.Archive -ErrorAction Stop; Compress-Archive -Path 'release\DX.PdfViewer-Win64\*' -DestinationPath 'release\DX.PdfViewer-%VERSION%-Win64.zip' -Force"
+if errorlevel 1 (
+    echo ERROR: Failed to create Win64 ZIP archive!
+    exit /b 1
+)
 
 echo.
 echo ========================================
@@ -75,9 +96,43 @@ echo Build Complete!
 echo ========================================
 echo.
 echo Release packages created:
-echo - release\DX.PdfViewer-v1.0.0-Win32.zip
-echo - release\DX.PdfViewer-v1.0.0-Win64.zip
+echo - release\DX.PdfViewer-%VERSION%-Win32.zip
+echo - release\DX.PdfViewer-%VERSION%-Win64.zip
 echo.
+
+REM Upload to GitHub if requested
+if /i "%UPLOAD_FLAG%"=="upload" (
+    echo ========================================
+    echo Uploading to GitHub Release %VERSION%
+    echo ========================================
+    echo.
+
+    REM Check if GITHUB_TOKEN is set
+    if "%GITHUB_TOKEN%"=="" (
+        echo ERROR: GITHUB_TOKEN environment variable not set!
+        echo Please set GITHUB_TOKEN before uploading.
+        echo Example: set GITHUB_TOKEN=ghp_your_token_here
+        exit /b 1
+    )
+
+    powershell -ExecutionPolicy Bypass -File upload-assets.ps1 -ReleaseTag "%VERSION%" -Win32Zip "release\DX.PdfViewer-%VERSION%-Win32.zip" -Win64Zip "release\DX.PdfViewer-%VERSION%-Win64.zip"
+
+    if errorlevel 1 (
+        echo ERROR: Upload failed!
+        exit /b 1
+    )
+
+    echo.
+    echo ========================================
+    echo Upload Complete!
+    echo ========================================
+    echo.
+) else (
+    echo.
+    echo To upload to GitHub, run:
+    echo build-release.bat %VERSION% upload
+    echo.
+)
 
 endlocal
 
