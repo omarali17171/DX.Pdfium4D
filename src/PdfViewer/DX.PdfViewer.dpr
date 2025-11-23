@@ -15,7 +15,9 @@ uses
   Main.Form in 'Main.Form.pas' {MainForm},
   DX.Pdf.API in '..\DX.Pdf.API.pas',
   DX.Pdf.Document in '..\DX.Pdf.Document.pas',
-  DX.Pdf.Viewer.FMX in '..\DX.Pdf.Viewer.FMX.pas';
+  DX.Pdf.Viewer.FMX in '..\DX.Pdf.Viewer.FMX.pas',
+  DX.Pdf.Renderer.FMX in '..\DX.Pdf.Renderer.FMX.pas',
+  DX.Pdf.Viewer.Core in '..\DX.Pdf.Viewer.Core.pas';
 
 {$R *.res}
 

@@ -317,6 +317,8 @@
         <DCCReference Include="..\DX.Pdf.API.pas"/>
         <DCCReference Include="..\DX.Pdf.Document.pas"/>
         <DCCReference Include="..\DX.Pdf.Viewer.FMX.pas"/>
+        <DCCReference Include="..\DX.Pdf.Renderer.FMX.pas"/>
+        <DCCReference Include="..\DX.Pdf.Viewer.Core.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
